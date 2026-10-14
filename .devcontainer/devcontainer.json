@@ -4,8 +4,7 @@
     "dockerfile": "Dockerfile"
   },
   "features": {
-    "git": "os-provided",
-    "sshd": "latest"
+    "git": "os-provided"
   },
   "workspaceFolder": "/workspace",
   "remoteUser": "root"
