@@ -4,8 +4,18 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 # 1. Setup System Dependencies
 RUN apt-get update && apt-get install -y \
-    clang llvm build-essential curl git zstd ca-certificates sudo \
+    build-essential curl wget git zstd ca-certificates sudo gnupg lsb-release software-properties-common \
     && rm -rf /var/lib/apt/lists/*
+
+# 1b. Install LLVM/Clang 23 from apt.llvm.org
+#     (Ubuntu 22.04's own repos only ship LLVM 14; libpolly-23-dev provides
+#     the static libs inkwell/llvm-sys need for its default static linking)
+RUN cd /tmp \
+    && wget https://apt.llvm.org/llvm.sh \
+    && chmod +x llvm.sh \
+    && ./llvm.sh 23 \
+    && apt-get install -y libpolly-23-dev \
+    && rm -f llvm.sh
 
 # 2. Setup User and Group
 RUN groupadd -g 1000 compilerGroup && \

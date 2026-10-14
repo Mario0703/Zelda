@@ -6,7 +6,9 @@ edition = "2024"
 [dependencies]
 lalrpop-util = "0.23.1"
 logos = "0.16.1"
-inkwell = { version = "0.10.0", features = ["llvm23-1"] }
+# crates.io inkwell 0.10.0 predates LLVM 23 support, so we track master;
+# switch back to a registry release once one ships with llvm23-1
+inkwell = { git = "https://github.com/TheDan64/inkwell", rev = "c9d9734ae17dbaf1d9902dab3b8ee9d2041781ff", features = ["llvm23-1"] }
 
 
 [build-dependencies]
