@@ -20,14 +20,6 @@ RUN apt-get update && apt-get install -y \
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 ENV PATH="/root/.cargo/bin:${PATH}"
 
-# 3. Setup OpenCode
-RUN curl -fsSL https://opencode.ai/v2/install | bash
-
-# 4. Setup Ollama (Modified)
-# We install the binary, but we DO NOT try to start it as a service
-# because systemd doesn't exist in Docker.
-RUN curl -fsSL https://ollama.com/install.sh | sh
-
 # Create the workspace directory (important for devcontainer.json)
 RUN mkdir -p /workspace
 WORKDIR /workspace

@@ -3,6 +3,10 @@
   "build": {
     "dockerfile": "Dockerfile"
   },
+  "features": {
+    "git": "os-provided",
+    "sshd": "latest"
+  },
   "workspaceFolder": "/workspace",
   "remoteUser": "root"
 }
