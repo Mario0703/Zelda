@@ -1,0 +1,9 @@
+
+{
+  "name": "Zelda",
+  "build": {
+    "dockerfile": "Dockerfile",
+  },
+  "workspaceFolder": "/workspace",
+  "remoteUser": "root"
+}

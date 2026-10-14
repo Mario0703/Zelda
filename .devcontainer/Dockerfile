@@ -16,6 +16,9 @@ RUN apt-get update && apt-get install -y \
 # 2. Setup Rust
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 
+# seup open code
+RUN curl -fsSL https://opencode.ai/v2/install | bash
+
 # 3. Set Environment Variables
 ENV PATH="/root/.cargo/bin:${PATH}"
 
