@@ -14,26 +14,21 @@ RUN apt-get update && apt-get install -y \
     sudo \
     && rm -rf /var/lib/apt/lists/*
 
-# 2. Create a non-root user 'zelda'
-ARG USERNAME=zelda
-ARG USER_UID=1000
-ARG USER_GID=$USER_UID
+# 2. Setup non-root user 'compilerUser'
+# We create the group and user.
+# Note: VS Code Dev Containers automatically tries to match the UID/GID of your host user.
+RUN groupadd -g 1000 compilerGroup && \
+    useradd -m -u 1000 -g compilerGroup -s /bin/bash compilerUser
 
-RUN groupadd --gid $USER_GID $USERNAME \
-    && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME \
-    && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
-    && chmod 0440 /etc/sudoers.d/$USERNAME
+# Give compilerUser sudo access without password
+RUN echo "compilerUser ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
-# 3. Setup Rust for the 'zelda' user
-USER $USERNAME
+# 3. Setup Rust for compilerUser
+USER compilerUser
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-ENV PATH="/home/zelda/.cargo/bin:${PATH}"
+ENV PATH="/home/compilerUser/.cargo/bin:${PATH}"
 
-# Create the workspace directory and set permissions
-USER root
-RUN mkdir -p /workspace && chown -R zelda:zelda /workspace
-USER $USERNAME
-
+# Set the working directory
 WORKDIR /workspace
 
 # Verify tools
