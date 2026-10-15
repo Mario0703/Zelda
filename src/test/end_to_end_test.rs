@@ -13,12 +13,19 @@ fn compiler(source: &str) -> i64 {
     let integer = parser.parse(lexer).expect("parse error");
     let typed_ast = semantic_analyser(integer);
     let ir = generate_code(typed_ast);
-
     generate_code_execution(&ir)
 }
 
 #[test]
 fn test_compiler() {
-    let result = compiler("2");
-    assert_eq!(result, 2);
+    // this test's own Zelda program file (single integer)
+    let program = std::fs::read_to_string(concat!(
+        env!("CARGO_MANIFEST_DIR"),
+        "/src/test/CodeFiles/endToEndInt.zd"
+    ))
+    .unwrap();
+
+    let result = compiler(&program);
+
+    assert_eq!(result, 5);
 }
