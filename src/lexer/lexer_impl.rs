@@ -1,14 +1,28 @@
-use crate::lexer::tokens::TOKENS;
-use logos::Logos;
-use std::fs;
+use crate::lexer::tokens::{LexingError, Token};
+use logos::{Logos, SpannedIter};
 
-// Runs the logos lexer over the file's content and returns the tokens.
-// Input that matches no pattern is skipped (`Ok(TOKENS)` / `Err(())` items);
-// wire error reporting on `Err` later if needed.
-pub fn LexerImplementations(file: String) -> Vec<TOKENS> {
-    let source = fs::read_to_string(&file).expect("could not open file");
+pub type Spanned<Tok, Loc, Error> = Result<(Loc, Tok, Loc), Error>;
 
-    TOKENS::lexer(&source)
-        .filter_map(|result| result.ok())
-        .collect()
+pub struct Lexer<'input> {
+    // instead of an iterator over characters, we have a token iterator
+    token_stream: SpannedIter<'input, Token>,
+}
+
+impl<'input> Lexer<'input> {
+    pub fn new(source: &'input str) -> Self {
+        // Token::lexer() is provided by the Logos derive
+        Self {
+            token_stream: Token::lexer(source).spanned(),
+        }
+    }
+}
+
+impl<'input> Iterator for Lexer<'input> {
+    type Item = Spanned<Token, usize, LexingError>;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        self.token_stream
+            .next()
+            .map(|(token, span)| Ok((span.start, token?, span.end)))
+    }
 }

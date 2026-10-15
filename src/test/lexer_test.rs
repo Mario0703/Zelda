@@ -1,16 +1,20 @@
 // src/test/lexer_test.rs
 
-use crate::lexer::lexer_impl::LexerImplementations;
-use crate::lexer::tokens::TOKENS;
+use crate::lexer::lexer_impl::Lexer;
+use crate::lexer::tokens::Token;
 
 #[test]
 fn given_an_integer_token_int_is_generated() {
-    // cargo runs tests from the package root, and fs paths in
-    // LexerImplementations resolve from the current directory —
-    // anchor this file to the crate root so the test is location-independent.
-    let zelda_source = concat!(env!("CARGO_MANIFEST_DIR"), "/src/test/zeldaInt.zd");
+    // Read the file contents — the path itself would be what gets lexed,
+    // and `/` matches no token pattern.
+    let zelda_source = std::fs::read_to_string(concat!(
+        env!("CARGO_MANIFEST_DIR"),
+        "/src/test/zeldaInt.zd"
+    ))
+    .unwrap();
 
-    let tokens = LexerImplementations(zelda_source.to_string());
+    let lexer = Lexer::new(&zelda_source);
+    let tokens: Vec<Token> = lexer.map(|token| token.unwrap().1).collect();
 
-    assert_eq!(tokens, vec![TOKENS::INTEGER(1)]);
+    assert_eq!(tokens, vec![Token::Integer(1)]);
 }

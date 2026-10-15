@@ -1,0 +1,27 @@
+use crate::ast::Integer;
+use crate::lexer::tokens::{LexingError, Token};
+
+grammar;
+
+extern {
+    type Location = usize;
+    type Error = LexingError;
+
+    // mapping: TERMINAL-name-in-rules => Token-variant(<payload type>)
+    enum Token {
+        INTEGER => Token::Integer(<i64>),
+    }
+}
+
+pub Program: Vec<Integer> = Programs;
+
+Programs: Vec<Integer> = {
+    <i:Integer> => vec![i],
+    <vs:Programs> <i:Integer> => {
+        let mut vs = vs;
+        vs.push(i);
+        vs
+    },
+};
+
+Integer: Integer = INTEGER => Integer::Int(<>);
