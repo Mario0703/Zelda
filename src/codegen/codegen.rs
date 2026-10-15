@@ -23,7 +23,6 @@ pub fn generate_code(typed_ast: TypedInteger) -> String {
             let constant = i64_type.const_int(value as u64, false);
             builder.build_return(Some(&constant)).unwrap();
 
-            // raw LLVM IR text (what clang links into an executable)
             module.print_to_string().to_string()
         }
     }

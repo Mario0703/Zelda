@@ -12,9 +12,9 @@ use std::fs;
 
 pub fn parse_file(
     file: String,
-) -> Result<Vec<Integer>, lalrpop_util::ParseError<usize, Token, LexingError>> {
+) -> Result<Integer, lalrpop_util::ParseError<usize, Token, LexingError>> {
     let source = fs::read_to_string(&file).expect("could not open file");
 
-    let parser = grammar::ProgramParser::new();
+    let parser = ProgramParser::new();
     parser.parse(Lexer::new(&source))
 }

@@ -6,3 +6,5 @@ mod codegen_test;
 mod lexer_test;
 mod parser_test;
 mod semant_test;
+
+mod end_to_end_test;

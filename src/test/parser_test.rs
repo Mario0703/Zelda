@@ -5,14 +5,11 @@ use crate::lexer::lexer_impl::Lexer;
 use crate::parser::{parse_file, ProgramParser};
 
 #[test]
-fn given_integers_a_program_is_parsed() {
+fn given_an_integer_a_program_is_parsed() {
     let parser = ProgramParser::new();
-    let program = parser.parse(Lexer::new("1 2 3")).unwrap();
+    let program = parser.parse(Lexer::new("2")).unwrap();
 
-    assert_eq!(
-        program,
-        vec![Integer::Int(1), Integer::Int(2), Integer::Int(3)]
-    );
+    assert_eq!(program, Integer::Int(2));
 }
 
 #[test]
@@ -22,5 +19,5 @@ fn a_single_integer_file_is_a_program() {
 
     let program = parse_file(zelda_path.to_string()).unwrap();
 
-    assert_eq!(program, vec![Integer::Int(1)]);
+    assert_eq!(program, Integer::Int(1));
 }
